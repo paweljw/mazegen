@@ -8,8 +8,6 @@
 
 using namespace std;
 
-const int seed = 0xDECAF1;
-
 int main(int argc, char** argv) {
   srand(time(0));
 
