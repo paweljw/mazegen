@@ -1,13 +1,21 @@
-all: mazegen
+CC      = g++
+CFLAGS  = -g -Wall
+LDFLAGS =
+OBJFILES = build/main.o build/grid.o build/maze_presenters/stdout.o
+TARGET  = build/mazegen
 
-build/grid.o: grid.cpp grid.h
-	g++ -g -Wall -c grid.cpp -o build/grid.o
-
-mazegen: main.cpp maze.h build/grid.o
-	g++ main.cpp build/grid.o -o build/mazegen
+.PHONY: all
+all: $(TARGET)
 
 run: all
-	./build/mazegen
+	./$(TARGET)
 
+$(TARGET): $(OBJFILES)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES) $(LDFLAGS)
+
+build/%.o: %.cpp $(wildcard $<.h)
+	$(CC) $(CFLAGS) -c $< -o build/$*.o
+
+.PHONY: clean
 clean:
-	rm -f build/mazegen
+	rm -f $(TARGET) $(OBJFILES)
