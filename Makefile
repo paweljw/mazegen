@@ -4,7 +4,8 @@ LDFLAGS =
 OBJFILES = build/main.o build/grid.o build/maze_presenters/stdout.o
 TARGET  = build/mazegen
 
-.PHONY: all
+.PHONY: all run clean
+
 all: $(TARGET)
 
 run: all
@@ -16,6 +17,5 @@ $(TARGET): $(OBJFILES)
 build/%.o: %.cpp $(wildcard $<.h)
 	$(CC) $(CFLAGS) -c $< -o build/$*.o
 
-.PHONY: clean
 clean:
 	rm -f $(TARGET) $(OBJFILES)
