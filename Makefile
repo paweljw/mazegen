@@ -4,7 +4,7 @@ LDFLAGS =
 OBJFILES = build/main.o build/grid.o build/maze_presenters/stdout.o build/generators/wilson.o
 TARGET  = build/mazegen
 
-.PHONY: all run clean
+.PHONY: all run clean test
 
 all: $(TARGET)
 
@@ -19,3 +19,6 @@ build/%.o: %.cpp $(wildcard $<.h)
 
 clean:
 	rm -f $(TARGET) $(OBJFILES)
+
+test:
+	echo "Heh"
