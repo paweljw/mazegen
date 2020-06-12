@@ -1,2 +1,5 @@
 language: cpp
 script: make && make test
+compiler:
+  - clang
+  - gcc

@@ -1,4 +1,4 @@
-CC      = g++
+CXX      ?= g++
 CFLAGS  = -g -Wall -std=c++11
 LDFLAGS =
 OBJFILES = build/main.o build/grid.o build/maze_presenters/stdout.o build/generators/wilson.o
@@ -12,10 +12,10 @@ run: all
 	./$(TARGET)
 
 $(TARGET): $(OBJFILES)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES) $(LDFLAGS)
+	$(CXX) $(CFLAGS) -o $(TARGET) $(OBJFILES) $(LDFLAGS)
 
 build/%.o: %.cpp $(wildcard $<.h)
-	$(CC) $(CFLAGS) -c $< -o build/$*.o
+	$(CXX) $(CFLAGS) -c $< -o build/$*.o
 
 clean:
 	rm -f $(TARGET) $(OBJFILES)
