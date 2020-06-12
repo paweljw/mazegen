@@ -1,5 +1,4 @@
-#ifndef __MAZE_H__
-#define __MAZE_H__
+#pragma once
 
 #include <map>
 #include <tuple>
@@ -36,4 +35,3 @@ const std::map<Direction, Direction> OPPOSITE = {
   {S, N},
 };
 
-#endif

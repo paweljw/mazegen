@@ -4,38 +4,26 @@
 #include <bits/stdc++.h>
 
 #include "maze.h"
+#include "grid.h"
 using namespace std;
-
-const ushort WIDTH = 50;
-const ushort HEIGHT = 50;
 
 const int seed = 0xDECAF1;
 
-ushort coord(Coord x, Coord y) {
-  return x * WIDTH + y;
-}
-
-void display_maze(ushort* grid, ushort cx, ushort cy) {
-  cout << "\e[2J\e[H";
-
+void display_maze(Grid* grid) {
   // top frame
   cout << " ";
-  for(ushort i = 0; i < WIDTH * 2 - 1; i++) {
+  for(auto i = 0; i < grid->width * 2 - 1; i++) {
     cout << "_";
   }
   cout << endl;
 
-  for(ushort y = 0; y < HEIGHT; y++) {
+  for(auto y = 0; y < grid->height; y++) {
     cout << "|";
-    for(ushort x = 0; x < WIDTH; x++) {
-      Coord cell = grid[coord(x, y)];
+    for(auto x = 0; x < grid->width; x++) {
+      Direction cell = grid->at(x, y);
 
-      if(cx == x && cy == y) {
-        cout << "\e[43m";
-      }
-
-      if(cell == 0 && y+1 < HEIGHT && grid[coord(x, y+1)] == 0) {
-        cout << " ";
+      if(cell == 0 && y+1 < grid->height && grid->at(x, y+1) == 0) {
+        cout << "X";
       } else {
         if((cell & S) != 0) {
           cout << " ";
@@ -44,18 +32,14 @@ void display_maze(ushort* grid, ushort cx, ushort cy) {
         }
       }
 
-      if(cx == x && cy == y) {
-        cout << "\e[0m";
-      }
-
-      if (cell == 0 && x+1 < WIDTH && grid[coord(x+1, y)] == 0) {
-        if(y+1 < HEIGHT && (grid[coord(x, y+1) == 0 || grid[coord(x+1, y+1)] == 0])) {
-          cout << " ";
+      if (cell == 0 && x+1 < grid->width && grid->at(x+1, y) == 0) {
+        if(y+1 < grid->height && (grid->at(x, y+1) == 0 || grid->at(x+1, y+1) == 0)) {
+          cout << "x";
         } else {
           cout << "_";
         }
       } else if ((cell & E) != 0) {
-        if(((cell | grid[coord(x+1, y)]) & S) != 0) {
+        if(((cell | grid->at(x+1, y)) & S) != 0) {
           cout << " ";
         } else {
           cout << "_";
@@ -67,18 +51,19 @@ void display_maze(ushort* grid, ushort cx, ushort cy) {
     cout << endl;
   }
 }
-vector<CoordDirection> walk(ushort* grid) {
+
+vector<CoordDirection> walk(Grid* grid) {
   vector<Direction> directions = {N, S, E, W};
 
   do {
-    Coord cx = rand() % WIDTH;
-    Coord cy = rand() % HEIGHT;
+    Coord cx = rand() % grid->width;
+    Coord cy = rand() % grid->height;
 
-    if(grid[coord(cx, cy)] != 0) continue;
+    if(grid->at(cx, cy) != 0) continue;
 
-    short* visits = new short[WIDTH * HEIGHT];
+    short* visits = new short[grid->width * grid->height];
 
-    for(ushort i = 0; i < WIDTH * HEIGHT; i++) {
+    for(ushort i = 0; i < grid->width * grid->height; i++) {
       visits[i] = -1;
     }
 
@@ -87,7 +72,6 @@ vector<CoordDirection> walk(ushort* grid) {
     bool walking = true;
 
     while(walking) {
-      display_maze(grid, cx, cy);
       walking = false;
       random_shuffle(directions.begin(), directions.end());
 
@@ -96,10 +80,10 @@ vector<CoordDirection> walk(ushort* grid) {
         Coord nx = cx + DX.at(dir);
         Coord ny = cy + DY.at(dir);
 
-        if(nx >= 0 && ny >= 0 && nx < WIDTH && ny < HEIGHT) {
-          visits[coord(cx, cy)] = dir;
+        if(nx >= 0 && ny >= 0 && nx < grid->width && ny < grid->height) {
+          visits[cx * grid->width + cy] = dir;
 
-          if (grid[coord(nx, ny)] != 0) {
+          if (grid->at(nx, ny) != 0) {
             k = 5; // break
           } else {
             cx = nx;
@@ -114,7 +98,7 @@ vector<CoordDirection> walk(ushort* grid) {
     Coord x = start_x, y = start_y;
 
     do {
-      short dir = visits[coord(x, y)];
+      short dir = visits[x * grid->width + y];
       if(dir == -1) break;
 
       path.push_back(make_tuple(x, y, dir));
@@ -129,17 +113,14 @@ vector<CoordDirection> walk(ushort* grid) {
 
 int main() {
   srand(seed);
-  cout << "Hello world" << endl;
 
-  ushort* grid = new ushort[WIDTH * HEIGHT];
+  int width = 50, height = 50;
 
-  for(ushort i = 0; i < WIDTH*HEIGHT; i++) {
-    grid[i] = 0;
-  }
+  Grid *grid = new Grid(width, height);
 
-  grid[coord(rand() % WIDTH, rand() % HEIGHT)] = IN;
+  grid->setAt(rand() % width, rand() % height, IN);
 
-  ushort remaining = WIDTH * HEIGHT - 1;
+  ushort remaining = width * height - 1;
 
   while(remaining > 0) {
     vector<CoordDirection> path = walk(grid);
@@ -151,16 +132,14 @@ int main() {
 
       Coord nx = x + DX.at(dir), ny = y + DY.at(dir);
 
-      grid[coord(x, y)] |= dir;
-      grid[coord(nx, ny)] |= OPPOSITE.at(dir);
+      grid->orAt(x, y, dir);
+      grid->orAt(nx, ny, OPPOSITE.at(dir));
 
       remaining--;
-
-      display_maze(grid, -1, -1);
     }
   }
 
-  display_maze(grid, -1, -1);
+  display_maze(grid);
 
   return 0;
 }
