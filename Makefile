@@ -1,5 +1,5 @@
 CC      = g++
-CFLAGS  = -g -Wall
+CFLAGS  = -g -Wall -std=c++11
 LDFLAGS =
 OBJFILES = build/main.o build/grid.o build/maze_presenters/stdout.o build/generators/wilson.o
 TARGET  = build/mazegen
