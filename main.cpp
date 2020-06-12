@@ -10,9 +10,8 @@ using namespace std;
 
 const int seed = 0xDECAF1;
 
-
-int main() {
-  srand(seed);
+int main(int argc, char** argv) {
+  srand(time(0));
 
   int width = 50, height = 50;
 
