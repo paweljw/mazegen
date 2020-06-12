@@ -1,7 +1,7 @@
 CC      = g++
 CFLAGS  = -g -Wall
 LDFLAGS =
-OBJFILES = build/main.o build/grid.o build/maze_presenters/stdout.o
+OBJFILES = build/main.o build/grid.o build/maze_presenters/stdout.o build/generators/wilson.o
 TARGET  = build/mazegen
 
 .PHONY: all run clean

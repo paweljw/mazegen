@@ -1,5 +1,5 @@
 #include "grid.h"
-#include "maze.h"
+#include "coords.h"
 
 Grid::Grid(int width, int height): width(width), height(height) {
   grid = new Coord[width * height];
