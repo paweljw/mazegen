@@ -4,4 +4,5 @@
 
 namespace MazePresenters {
   void stdout(Grid*);
+  void ncurses(Grid*);
 }

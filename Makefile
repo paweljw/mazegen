@@ -1,8 +1,11 @@
 CXX      ?= g++
-CFLAGS  = -g -Wall -std=c++11
-LDFLAGS =
-OBJFILES = build/main.o build/grid.o build/maze_presenters/stdout.o build/generators/wilson.o
-TARGET  = build/mazegen
+CFLAGS   = -g -Wall -std=c++11
+LDFLAGS  = -lncurses
+OBJFILES = build/main.o build/grid.o \
+					 build/maze_presenters/stdout.o \
+					 build/generators/wilson.o \
+					 build/maze_presenters/ncurses.o
+TARGET   = build/mazegen
 
 .PHONY: all run clean test
 
