@@ -20,6 +20,6 @@ void Grid::orAt(int x, int y, Direction dir) {
 }
 
 int Grid::coord(int x, int y) {
-  return x * width + y;
+  return y * height + x;
 }
 
