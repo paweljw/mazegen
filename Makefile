@@ -25,3 +25,9 @@ clean:
 
 test:
 	echo "Heh"
+
+todo:
+	rg --vimgrep "TODO:" | grep -v "Makefile" | xargs -I{} echo "* {}"
+
+todofile:
+	rg --vimgrep "TODO:" | grep -v "Makefile" | xargs -I{} echo "* {}" > TODO

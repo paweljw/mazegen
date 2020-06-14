@@ -12,6 +12,7 @@ using namespace std;
 int main(int argc, char** argv) {
   srand(time(0));
 
+  // TODO: Surprise! Crashes on non-square mazes!
   int width = 40, height = 40;
 
   Generator* b = new Wilson();
